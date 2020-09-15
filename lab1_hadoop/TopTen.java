@@ -63,15 +63,15 @@ public class TopTen {
 	protected void cleanup(Context context) throws IOException, InterruptedException {
 		// Output our ten records to the reducers with a null key
 		for (int i=0; i<10; i++){
-			Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry()
-			context.write(NullWrittable.get(), entry.getValue());
+			Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry();
+			context.write(NullWritable.get(), entry.getValue());
 		}	
 	}
 	}
 
-	public static class TopTenReducer extends TableReducer<NullWritable, Text, NullWritable> {
+	public static class TopTenReducer extends TableReducer<NullWritable, Text, ImmutableBytesWritable> {
 		// Stores a map of user reputation to the record
-		private TreeMap<Integer, Text> repToRecordMap = new TreeMap<Integer, Text>(Collections.reverseOrder());
+		private TreeMap<Integer, Text> repToRecordMap = new TreeMap<Integer, Text>();
 
 	public void reduce(NullWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 		try{
@@ -84,13 +84,13 @@ public class TopTen {
 			}
 			// create again the TreeMap and limit it to 10 
 			for (int i=0; i<10; i++){
-				Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry()
+				Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry();
 				Put insHBase = new Put(Integer.toString(i).getBytes());
-				String rep = emtry.getKey().toString();
+				String rep = entry.getKey().toString();
 				String id = entry.getValue().toString();
 				insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("rep"), Bytes.toBytes(rep));
 				insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("id"), Bytes.toBytes(id));
-				context.write(NullWritable.get(), insHBase);
+				context.write(null, insHBase);
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,17 +102,19 @@ public class TopTen {
 		Configuration conf = HBaseConfiguration.create();
 		
 		// define scan and define column families to scan
-		//Scan scan = new Scan();
-		//scan.addFamily(Bytes.toBytes("info"));
+		Scan scan = new Scan();
+		scan.addFamily(Bytes.toBytes("info"));
 		
 		Job job = Job.getInstance(conf, "topten");
 		job.setNumReduceTasks(1);
 		job.setJarByClass(TopTen.class);
 		job.setMapperClass(TopTenMapper.class);
-		job.setMapOutputKey();
+		
+		job.setMapOutputKeyClass(NullWritable.class);
+        	job.setMapOutputValueClass(Text.class);
 
 		// define input file
-		FileInputFormat.addInputPath(job, new Path(args[0]))
+		FileInputFormat.addInputPath(job, new Path(args[0]));
 
 		// define output table
 		TableMapReduceUtil.initTableReducerJob("topten", TopTenReducer.class, job);
