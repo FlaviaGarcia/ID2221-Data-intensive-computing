@@ -51,52 +51,65 @@ public class TopTen {
 
 	public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 		Map<String, String> user_map =  transformXmlToMap(value.toString());
-		
 		String user_id = user_map.get("Id");
 		String user_reputation = user_map.get("Reputation");
-		// first check that Id != null 
-		if (user_id != null){
-			repToRecordMap.put(Integer.parseInt(user_reputation), value);
+		if (user_id != null && !user_id.equals("-1")){
+			repToRecordMap.put(Integer.parseInt(user_reputation), new Text(user_reputation+"-"+user_id));
 		}
 	}
 
 	protected void cleanup(Context context) throws IOException, InterruptedException {
 		// Output our ten records to the reducers with a null key
-		for (int i=0; i<10; i++){
-			Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry();
-			context.write(NullWritable.get(), entry.getValue());
+		int i = 0;
+		for (int key : repToRecordMap.descendingKeySet()) {
+			context.write(NullWritable.get(), repToRecordMap.get(key));
+			if (i<9){
+				i++;
+			}else{
+				break;
+			}
 		}	
 	}
 	}
 
-	public static class TopTenReducer extends TableReducer<NullWritable, Text, ImmutableBytesWritable> {
+	public static class TopTenReducer extends TableReducer<NullWritable, Text, NullWritable> {
 		// Stores a map of user reputation to the record
-		private TreeMap<Integer, Text> repToRecordMap = new TreeMap<Integer, Text>();
+		private TreeMap<Integer, Integer> repToRecordMap = new TreeMap<Integer, Integer>();
 
-	public void reduce(NullWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-		try{
-			// everything is in values cause the key of everything is = null  
-			for (Text user_text: values){
-				Map<String, String> user_map =  transformXmlToMap(user_text.toString());
-				String user_reputation = user_map.get("Reputation");
-				String user_id = user_map.get("id");
-				repToRecordMap.put(Integer.parseInt(user_reputation), new Text(user_id));
+		public void reduce(NullWritable key, Iterable<Text> records, Context context) throws IOException, InterruptedException {
+			try {
+				for (Text record_text : records) {
+					// record_text: reputation+"-"+id of type Text
+					String[] info = record_text.toString().split("-");	
+					Integer user_rep = Integer.parseInt(info[0]);
+					Integer user_id = Integer.parseInt(info[1]);
+						
+					System.out.println("Reducer Adding rep " + user_rep + " from user " + user_id);
+					repToRecordMap.put(user_rep, user_id);
+					
+				}
+
+				int i = 0;
+
+				for (int rep_key : repToRecordMap.descendingKeySet()) {
+					// create hbase put with rowkey as id
+					Put insHBase = new Put(Bytes.toBytes(i));
+
+					insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("rep"), Bytes.toBytes(rep_key));
+					insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("id"), Bytes.toBytes(repToRecordMap.get(rep_key)));
+
+					context.write(null, insHBase);
+					if (i<9){
+						i++;
+					}else{
+						break;
+					}	
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			// create again the TreeMap and limit it to 10 
-			for (int i=0; i<10; i++){
-				Map.Entry<Integer, Text> entry = repToRecordMap.pollLastEntry();
-				Put insHBase = new Put(Integer.toString(i).getBytes());
-				String rep = entry.getKey().toString();
-				String id = entry.getValue().toString();
-				insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("rep"), Bytes.toBytes(rep));
-				insHBase.addColumn(Bytes.toBytes("info"), Bytes.toBytes("id"), Bytes.toBytes(id));
-				context.write(null, insHBase);
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-	}
-	}
+    	}
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = HBaseConfiguration.create();
