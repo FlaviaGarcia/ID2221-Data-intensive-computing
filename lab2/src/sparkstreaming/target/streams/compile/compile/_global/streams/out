@@ -1,0 +1,9 @@
+[0m[[0m[31merror[0m] [0m[0m/home/matteo/ID2221-lab2-2020/src/sparkstreaming/KafkaSpark.scala:50:37: not enough arguments for method exists: (p: Double => Boolean)Boolean.[0m
+[0m[[0m[31merror[0m] [0m[0mUnspecified value parameter p.[0m
+[0m[[0m[31merror[0m] [0m[0m		if (state.exists() && value.exists()){[0m
+[0m[[0m[31merror[0m] [0m[0m		                                  ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/matteo/ID2221-lab2-2020/src/sparkstreaming/KafkaSpark.scala:56:45: not enough arguments for method exists: (p: Double => Boolean)Boolean.[0m
+[0m[[0m[31merror[0m] [0m[0mUnspecified value parameter p.[0m
+[0m[[0m[31merror[0m] [0m[0m		} else if (!state.exists() && value.exists()){[0m
+[0m[[0m[31merror[0m] [0m[0m		                                          ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
