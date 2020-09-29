@@ -26,6 +26,7 @@ object KafkaSpark {
     session.execute("CREATE KEYSPACE IF NOT EXISTS avg_space WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };")
 	session.execute("CREATE TABLE IF NOT EXISTS avg_space.avg (word text PRIMARY KEY, count float);")
     // make a connection to Kafka and read (key, value) pairs from it
+	
 	val sparkConf = new SparkConf().setAppName("KafkaSparkWordCound").setMaster("local[2]")
 	val ssc = new StreamingContext(sparkConf, Seconds(1))
 	ssc.checkpoint(".checkpoints/")
@@ -37,12 +38,13 @@ object KafkaSpark {
 	"zookeeper.connection.timeout.ms" -> "1000")
 
 	val topics = Set("avg")
+
     val messages = KafkaUtils.createDirectStream[
 	String, String, StringDecoder, StringDecoder](
 	ssc, kafkaConf, topics)
 	//messages.print()
-	val values = messages.map(x => x._2)
-	val pairs = values.map(_.split(",")).map(x=> (x(0), x(1).toDouble))
+	val values = messages.map(x => x._2) //transfor the tuple (null, String) to (String)
+	val pairs = values.map(_.split(",")).map(x=> (x(0), x(1).toDouble)) //split the string in 2 values
 	pairs.print()
 
     // measure the average value for each key in a stateful manner
@@ -54,13 +56,13 @@ object KafkaSpark {
 			state.update(newAvg)
 			return (key, newAvg)
 		} 
-		else if (!state.exists() && value.isDefined){
+		else if (!state.exists() && value.isDefined){ //first time we process the window (first window)
 			val newValue = value.get
 			state.update(newValue)
 			return (key, newValue)
 		} 
-		else {
-			return ("", 0.0)
+		else { //no value is defined
+			return ("", 0.0) 
 		}
     }
     val stateDstream = pairs.mapWithState(StateSpec.function(mappingFunc _))
