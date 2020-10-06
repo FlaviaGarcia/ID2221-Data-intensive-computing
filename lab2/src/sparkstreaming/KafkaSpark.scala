@@ -18,6 +18,9 @@ import com.datastax.spark.connector._
 import com.datastax.driver.core.{Session, Cluster, Host, Metadata}
 import com.datastax.spark.connector.streaming._
 
+case class MyState(count: Int = 0, sum: Double = 0){
+}
+
 object KafkaSpark {
   def main(args: Array[String]) {
     // connect to Cassandra and make a keyspace and table as explained in the document
@@ -28,7 +31,7 @@ object KafkaSpark {
     // make a connection to Kafka and read (key, value) pairs from it
 	
 	val sparkConf = new SparkConf().setAppName("KafkaSparkWordCound").setMaster("local[2]")
-	val ssc = new StreamingContext(sparkConf, Seconds(1))
+	val ssc = new StreamingContext(sparkConf, Seconds(10))
 	ssc.checkpoint(".checkpoints/")
 
     val kafkaConf = Map(
@@ -48,17 +51,19 @@ object KafkaSpark {
 	pairs.print()
 
     // measure the average value for each key in a stateful manner
-    def mappingFunc(key: String, value: Option[Double], state: State[Double]): (String, Double) = {
+    def mappingFunc(key: String, value: Option[Double], state: State[MyState]): (String, Double) = {
 		if (state.exists() && value.isDefined){
 			val newValue = value.get
-			val oldAvg = state.get()
-			val newAvg = (newValue + oldAvg)/2
-			state.update(newAvg)
+			val newSum = state.get().sum + newValue
+			val newCount = state.get().count + 1
+			val newAvg = newSum / newCount
+			val newState = MyState(newCount, newSum)
+			state.update(newState)
 			return (key, newAvg)
 		} 
 		else if (!state.exists() && value.isDefined){ //first time we process the window (first window)
 			val newValue = value.get
-			state.update(newValue)
+			state.update(MyState(1, newValue))
 			return (key, newValue)
 		} 
 		else { //no value is defined

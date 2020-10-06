@@ -1,21 +1,25 @@
-[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/spark_kafka_2.11-1.0.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mPackaging /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/spark_kafka_2.11-1.0.jar ...[0m
 [0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$anonfun$1.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$1.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$anonfun$4.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$4.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$4.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$anonfun$2.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$2.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$2.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$anonfun$3.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$3.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$anonfun$3.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$typecreator2$1.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$typecreator2$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$typecreator2$1.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/KafkaSpark$$typecreator1$1.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/ID2221-lab2-2020/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$typecreator1$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/KafkaSpark$$typecreator1$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/MyState.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/MyState.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	sparkstreaming/MyState$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/matteo/Data-intensive-computing/lab2/src/sparkstreaming/target/scala-2.11/classes/sparkstreaming/MyState$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m
